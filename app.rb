@@ -5,6 +5,8 @@ require 'bcrypt'
 
 enable :sessions
 
+
+
 get('/') do
     slim(:index)
 end
@@ -12,6 +14,18 @@ end
 get('/newuser') do 
     slim(:register)
 
+end
+
+get('/welcome') do
+    if session[:username] == nil
+        redirect('/denied') 
+    end
+    slim(:welcome)
+end
+
+get('/welcome/:profile') do
+    session[:profile] = params[:profile]
+    slim(:profile)
 end
 
 post('/login') do
@@ -24,7 +38,7 @@ post('/login') do
         redirect('/denied')
     end
 
-    if checkpassword(usercred[0][1],params["password"]) == true 
+    if checkpassword(usercred[0][1],params["password"],usercred[0][0]) == true 
         redirect("/welcome")
     else
         redirect("/denied")
@@ -46,13 +60,19 @@ post('/register') do
         session[:usernameerror] = true
         redirect('/newuser')
     end
+    session[:username] = params["username"]
+    redirect('/welcome')
+end
 
+get('/logout') do 
+    session[:username] = nil
+    redirect('/')
 end
 
 
-def checkpassword(dbps,ps)
-    if dbps == BCrypt::Password.create(ps)
-        sessions[:username] = usercred[0][0]
+def checkpassword(dbps,ps,un)
+    if BCrypt::Password.new(dbps) == ps
+        session[:username] = un
         return true
     else
         return false

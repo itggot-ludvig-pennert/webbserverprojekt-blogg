@@ -1,1 +1,16 @@
-span #{welcome sessions[:username]}
+span welcome #{session[:username]}
+br/
+
+span ALLPOSTS
+- db = SQLite3::Database.new("db/database.db")
+- db.results_as_hash = true
+- posts = db.execute("SELECT * FROM posts ORDER BY postid DESC")
+
+
+- unless posts.empty?
+    
+    - posts.each do |post| 
+        br/
+        a href="/welcome/#{post["username"]}" #{post["username"]}
+        p #{post["content"]}
+        br/

@@ -5,5 +5,16 @@ div
         input type="password" placeholder="Password pls" name="password"
         input type="submit" value="Login"
 
+
 a href="/newuser" 
     button Register
+
+
+
+- if session[:username] != nil
+    p hello #{session[:username]}
+
+    a href="/logout"
+        button Logout
+- else
+    p not logged in

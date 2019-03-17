@@ -1,0 +1,15 @@
+a href="/welcome" Back
+
+p hello, welcome to #{session[:profile]}´s profile
+
+span Posts made by this user
+- db = SQLite3::Database.new("db/database.db")
+- db.results_as_hash = true
+- posts = db.execute("SELECT * FROM posts WHERE username = '#{session[:profile]}' ORDER BY postid DESC")
+
+- unless posts.empty?
+    
+    - posts.each do |post| 
+        br/
+        p #{post["content"]}
+        br/
