@@ -1,10 +1,21 @@
-span welcome #{session[:username]}
-br/
-
-span ALLPOSTS
 - db = SQLite3::Database.new("db/database.db")
 - db.results_as_hash = true
 - posts = db.execute("SELECT * FROM posts ORDER BY postid DESC")
+
+
+span welcome #{session[:username]}
+- 5.times do 
+    br/
+span New Post
+form action="/newpost" method="post"
+    input type="text" placeholder="what's on your mind?" name="content"
+    input type="submit" value="Post"
+
+
+- 5.times do 
+    br/
+span ALLPOSTS
+
 
 
 - unless posts.empty?

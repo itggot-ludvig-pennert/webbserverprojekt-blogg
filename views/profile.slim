@@ -12,4 +12,8 @@ span Posts made by this user
     - posts.each do |post| 
         br/
         p #{post["content"]}
-        br/
+        p #{post["postid"]}
+        form action="/deletepost" method="post"
+            input type="hidden" value="#{post["postid"]}" name="postid"
+            input type="submit" value="Delete post"
+           
